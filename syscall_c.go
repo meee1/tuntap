@@ -5,18 +5,26 @@ package main
 #include <sys/ioctl.h>
 #include <linux/if.h>
 #include <linux/if_tun.h>
+
+# define _IOW(x,y,z)	(((x)<<8)|y)
+
+#define IFF_TUN		0x0001
+#define IFF_TAP		0x0002
+#define IFF_NO_PI	0x1000
+#define TUNSETIFF     _IOW('T', 202, int) 
+#define	IFNAMSIZ	16
 */
-import "C"
+//import "C"
 
 const (
-	IFF_TUN   = C.IFF_TUN
-	IFF_TAP   = C.IFF_TAP
-	IFF_NO_PI = C.IFF_NO_PI
-	TUNSETIFF = C.TUNSETIFF
+	IFF_TUN   = 0x0001
+	IFF_TAP   = 0x0002
+	IFF_NO_PI = 0x1000
+	TUNSETIFF = ((('T')<<8)|202)
 )
 
 type ifreq struct {
-	name  [C.IFNAMSIZ]byte
+	name  [16]byte
 	flags uint16
-	_     [C.IFNAMSIZ - 2]byte
+	_     [16 - 2]byte
 }
